@@ -40,7 +40,7 @@ Every run automatically creates **`pinterest_bulk_upload.csv`** inside the `pins
 
 Two things are asked before each run starts:
 - **How many pins per day** — controls how the Publish date column is grouped (e.g. `10` means the first 10 rows get tomorrow's date, the next 10 get the day after, and so on).
-- **UTM parameters** — whatever you type gets appended to each article's link (e.g. `utm_source=arslan&utm_medium=social&utm_campaign=arslan`). Leave it blank for no UTM parameters at all.
+- **UTM parameters** — whatever you type gets appended to each article's link (e.g. `utm_source=pinterest&utm_medium=link&utm_campaign=folklore`). Leave it blank for no UTM parameters at all.
 
 **If you run it through GitHub Actions** (the normal way): click **Run workflow** on the Actions tab — two fields appear right there with sensible defaults already filled in, just edit them if you want something different, then click the green **Run workflow** button.
 

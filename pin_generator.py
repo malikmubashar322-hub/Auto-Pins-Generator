@@ -18,7 +18,7 @@ For each row, builds a pin (2:3 ratio, Pinterest's preferred size):
     [ random-colored gradient band with wrapped title,
       text auto-switches black/white for readability ]
     [ same image again ]
-    [ small "Arslan" watermark badge, bottom-right corner ]
+    [ small "Mubashar" watermark badge, bottom-right corner ]
 and saves it as a compressed JPEG in the output folder (small file size,
 no visible quality loss - see JPEG_QUALITY below).
 
@@ -53,14 +53,14 @@ PINS_PER_DAY / UTM_QUERY unset to be prompted for them instead:
     ARTICLE_COL               - optional. Defaults to "article_url".
     IMAGE_COL                 - optional. Defaults to "image_url".
     TITLE_COL                 - optional. Defaults to "title".
-    WATERMARK_TEXT            - optional. Defaults to "Arslan".
+    WATERMARK_TEXT            - optional. Defaults to "Mubashar".
     JPEG_QUALITY              - optional. 1-95. Defaults to 85 (high quality, small file).
     PINTEREST_BOARD           - optional. Defaults to "Boredpanda Viral".
     PINTEREST_THUMBNAIL       - optional. Defaults to "0:00" (matches Pinterest's template).
     PINS_PER_DAY              - optional. If unset, you'll be prompted (default if not interactive: 10).
     UTM_QUERY                 - optional. If unset, you'll be prompted. Set to an empty
                                 value to add no UTM parameters at all.
-                                Default: "utm_source=arslan&utm_medium=social&utm_campaign=arslan"
+                                Default: "utm_source=pinterest&utm_medium=link&utm_campaign=folklore"
     PUBLISH_START_OFFSET_DAYS - optional. Defaults to 1 (schedule starts tomorrow).
     CSV_CHUNK_SIZE            - optional. Defaults to 100 (max rows per CSV file before splitting).
     GOOGLE_SERVICE_ACCOUNT_JSON - optional, advanced. The full contents of your service
@@ -99,13 +99,13 @@ LATEST_RUN_DIR = os.environ.get("LATEST_RUN_DIR", "latest_run")
 ARTICLE_COL = os.environ.get("ARTICLE_COL", "article_url")
 IMAGE_COL = os.environ.get("IMAGE_COL", "image_url")
 TITLE_COL = os.environ.get("TITLE_COL", "title")
-WATERMARK_TEXT = os.environ.get("WATERMARK_TEXT", "Arslan")
+WATERMARK_TEXT = os.environ.get("WATERMARK_TEXT", "Mubashar")
 JPEG_QUALITY = int(os.environ.get("JPEG_QUALITY", "85"))
 
 # Pinterest bulk-upload CSV formatting
 PINTEREST_BOARD = os.environ.get("PINTEREST_BOARD", "Boredpanda Viral")
 PINTEREST_THUMBNAIL = os.environ.get("PINTEREST_THUMBNAIL", "0:00")
-DEFAULT_UTM_QUERY = "utm_source=arslan&utm_medium=social&utm_campaign=arslan"
+DEFAULT_UTM_QUERY = "utm_source=pinterest&utm_medium=link&utm_campaign=folklore"
 DEFAULT_PINS_PER_DAY = 10
 PUBLISH_START_OFFSET_DAYS = int(os.environ.get("PUBLISH_START_OFFSET_DAYS", "1"))
 CSV_CHUNK_SIZE = int(os.environ.get("CSV_CHUNK_SIZE", "100"))
@@ -116,7 +116,7 @@ SHEET_ID = os.environ.get("SHEET_ID", "").strip()
 PIN_LINK_COL = os.environ.get("PIN_LINK_COL", "Pin Link")
 
 # Set automatically by GitHub Actions - used to build each pin's public raw link
-GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "").strip()   # e.g. "Arslan0070/PinterestPins"
+GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "").strip()   # e.g. "Mubashar/PinterestPins"
 GITHUB_REF_NAME = os.environ.get("GITHUB_REF_NAME", "main").strip()   # e.g. "main"
 
 REQUEST_HEADERS = {
@@ -374,7 +374,7 @@ def get_pins_per_day() -> int:
 def get_utm_query() -> str:
     """
     The UTM query string appended to each article link (without the
-    leading '?'), e.g. "utm_source=arslan&utm_medium=social&utm_campaign=arslan".
+    leading '?'), e.g. "utm_source=pinterest&utm_medium=link&utm_campaign=folklore".
     Priority:
     1) UTM_QUERY env var / workflow input, if set (an empty value means "no UTM at all")
     2) an interactive typed prompt, if running in a real terminal (local run)
