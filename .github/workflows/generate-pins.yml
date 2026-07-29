@@ -1,0 +1,65 @@
+name: Generate Pinterest Pins
+
+on:
+  workflow_dispatch:      # only runs when you click "Run workflow" in the Actions tab
+    inputs:
+      pins_per_day:
+        description: "How many pins per day (Publish date groups by this many rows)"
+        required: false
+        default: "10"
+      utm_query:
+        description: "UTM parameters to append to each article link (no leading ?). Leave blank for no UTM at all."
+        required: false
+        default: "utm_source=arslan&utm_medium=social&utm_campaign=arslan"
+
+permissions:
+  contents: write   # needed so the workflow can commit the generated pins back into the repo
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Clear this run's temporary download folder (does NOT touch pins/ - nothing hosted is ever deleted)
+        run: rm -rf latest_run && mkdir -p latest_run
+
+      - name: Generate pins
+        env:
+          SHEET_CSV_URL: ${{ secrets.SHEET_CSV_URL }}
+          ARTICLE_COL: "url"   # your scraper's sheet uses a column named URL - remove this line if you rename it to article_url instead
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          PINS_PER_DAY: ${{ inputs.pins_per_day }}
+          UTM_QUERY: ${{ inputs.utm_query }}
+        run: python pin_generator.py
+
+      - name: Commit and push pins to the repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pins/
+          git diff --staged --quiet && echo "No new pins to commit." || (git commit -m "Add pins - $(date -u +'%Y-%m-%d %H:%M UTC')" && git push)
+
+      - name: Upload THIS RUN's pin images as a separate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pins-${{ github.run_id }}
+          path: latest_run/*.jpg
+          retention-days: 14
+
+      - name: Upload THIS RUN's Pinterest bulk-upload CSV(s) as a separate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pin-links-${{ github.run_id }}
+          path: latest_run/pinterest_bulk_upload*.csv
+          retention-days: 14
