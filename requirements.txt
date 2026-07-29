@@ -1,0 +1,6 @@
+pandas>=2.0
+requests>=2.31
+Pillow>=10.0
+beautifulsoup4>=4.12
+gspread>=6.0
+google-auth>=2.29
