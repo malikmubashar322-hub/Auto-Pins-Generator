@@ -509,9 +509,12 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     os.makedirs(LATEST_RUN_DIR, exist_ok=True)
 
-    print(f"Fetching sheet: {SHEET_CSV_URL}")
-    df = pd.read_csv(SHEET_CSV_URL)
+       print(f"Fetching sheet: {SHEET_CSV_URL}")
+    df = pd.read_csv(SHEET_CSV_URL, engine='python', on_bad_lines='skip', dtype=str, keep_default_na=False)
     df.columns = [c.strip().lower() for c in df.columns]
+    # url link ko url me badlo
+    if "url link" in df.columns:
+        df = df.rename(columns={"url link": "url"})
 
     article_col = ARTICLE_COL.lower()
     image_col = IMAGE_COL.lower()
