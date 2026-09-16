@@ -514,7 +514,7 @@ def main():
     df.columns = [c.strip().lower() for c in df.columns]
     # url link ko url me badlo
     if "url link" in df.columns:
-    df = df.rename(columns={"url link": "url"})
+        df = df.rename(columns={"url link": "url"})
 
     article_col = ARTICLE_COL.lower()
     image_col = IMAGE_COL.lower()
