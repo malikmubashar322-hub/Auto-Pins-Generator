@@ -509,7 +509,7 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     os.makedirs(LATEST_RUN_DIR, exist_ok=True)
 
-   print(f"Fetching sheet: {SHEET_CSV_URL}")
+    print(f"Fetching sheet: {SHEET_CSV_URL}")
     df = pd.read_csv(SHEET_CSV_URL, engine='python', on_bad_lines='skip', dtype=str, keep_default_na=False)
     df.columns = [c.strip().lower() for c in df.columns]
     if "url link" in df.columns:
